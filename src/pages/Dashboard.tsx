@@ -1,9 +1,7 @@
 import { clearSession, getSession } from '../auth/session'
 import { useNavigate } from 'react-router-dom'
-import { LogOut, Wifi, Settings, TicketPercent, ImageIcon } from 'lucide-react'
+import { LogOut, Wifi, Settings, TicketPercent, Image as ImageIcon } from 'lucide-react'
 import DashboardCard from '../components/DashboardCard'
-
-// NEW
 import OutrosAtalhos from '@/modules/atalhos/OutrosAtalhos'
 
 export default function Dashboard() {
@@ -36,9 +34,7 @@ export default function Dashboard() {
       <main className="max-w-6xl mx-auto px-4 py-10 space-y-8">
         <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-8 backdrop-blur-md">
           <h3 className="text-xl font-bold mb-2">Bem-vindo(a)</h3>
-          <p className="text-neutral-300">
-            Em desenvolvimento
-          </p>
+          <p className="text-neutral-300">Em desenvolvimento</p>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -68,7 +64,6 @@ export default function Dashboard() {
           />
         </div>
 
-        {/* NOVA SUBDIVISÃO */}
         <OutrosAtalhos />
       </main>
     </div>

@@ -39,7 +39,7 @@ export default function DashboardCard({ title, description, icon, to, className 
   function handleClick(e: React.MouseEvent<HTMLButtonElement>) {
     e.preventDefault()
     e.stopPropagation()
-    navigate(to)
+    if (to) navigate(to)
   }
 
   return (

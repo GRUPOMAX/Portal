@@ -65,51 +65,53 @@ async function api<T>(tableId: string, path: string, init?: RequestInit): Promis
 }
 
 // src/modules/config/lib/noco.ts
-export async function listRecords(
+export async function listRecords<T>(
   tableId: string,
   opts: {
-    viewId?: string
-    fields?: string[] | string
-    where?: string
-    sort?: string
-    limit?: number
-    offset?: number
+    viewId?: string;
+    fields?: string[] | string;
+    where?: string;
+    sort?: string;
+    limit?: number;
+    offset?: number;
   } = {}
-) {
-  const base = String(import.meta.env.VITE_NOCODB_URL || '').replace(/\/+$/, '')
-  const url = new URL(`${base}/api/v2/tables/${tableId}/records`)
+): Promise<T[]> {
+  const base = String(import.meta.env.VITE_NOCODB_URL || '').replace(/\/+$/, '');
+  const url = new URL(`${base}/api/v2/tables/${tableId}/records`);
 
-  if (opts.viewId) url.searchParams.set('viewId', opts.viewId)
+  if (opts.viewId) url.searchParams.set('viewId', opts.viewId);
   if (opts.fields) {
-    const f = Array.isArray(opts.fields) ? opts.fields.join(',') : opts.fields
-    url.searchParams.set('fields', f)
+    const f = Array.isArray(opts.fields) ? opts.fields.join(',') : opts.fields;
+    url.searchParams.set('fields', f);
   }
-  if (opts.where) url.searchParams.set('where', opts.where)
-  if (opts.sort) url.searchParams.set('sort', opts.sort)
+  if (opts.where) url.searchParams.set('where', opts.where);
+  if (opts.sort) url.searchParams.set('sort', opts.sort);
 
   // AQUI é onde o “25 por padrão” morre:
-  url.searchParams.set('limit', String(opts.limit ?? 25))
-  url.searchParams.set('offset', String(opts.offset ?? 0))
+  url.searchParams.set('limit', String(opts.limit ?? 25));
+  url.searchParams.set('offset', String(opts.offset ?? 0));
 
   const res = await fetch(url.toString(), {
     headers: {
-      'accept': 'application/json',
+      accept: 'application/json',
       'xc-token': String(import.meta.env.VITE_NOCODB_TOKEN || ''),
     },
-  })
+  });
+
   if (!res.ok) {
-    const text = await res.text().catch(() => '')
-    throw new Error(`NocoDB ${res.status}: ${text || res.statusText}`)
+    const text = await res.text().catch(() => '');
+    throw new Error(`NocoDB ${res.status}: ${text || res.statusText}`);
   }
-  const json = await res.json()
+
+  const json = await res.json();
   const list = Array.isArray(json?.list)
     ? json.list
     : Array.isArray(json?.rows)
       ? json.rows
       : Array.isArray(json)
         ? json
-        : []
-  return list
+        : [];
+  return list as T[];
 }
 
 
@@ -117,7 +119,7 @@ export async function readRecord<T>(tableId: string, id: string | number): Promi
   return api<NocoRecord<T>>(tableId, `/records/${id}`);
 }
 
-export async function createRecord<T>(tableId: string, body: Partial<T>): Promise<NocoRecord<T>> {
+export async function createRecord<T extends Record<string, any>>(tableId: string, body: Partial<T>): Promise<NocoRecord<T>> {
   // Em create, NUNCA enviar Id nem auto-fields
   const clean = sanitizePayload<T>(body, { keepId: false });
   return api<NocoRecord<T>>(tableId, '/records', {
@@ -126,24 +128,54 @@ export async function createRecord<T>(tableId: string, body: Partial<T>): Promis
   });
 }
 
-export async function updateRecord<T>(
+// aceita os dois formatos:
+// - updateRecord(tableId, { Id, ...body })
+// - updateRecord(tableId, id, body)
+export async function updateRecord<T extends Record<string, any>>(
   tableId: string,
   body: Partial<T> & { Id?: number | string; id?: number | string }
+): Promise<NocoRecord<T>>;
+export async function updateRecord<T extends Record<string, any>>(
+  tableId: string,
+  id: string | number,
+  body: Partial<T>
+): Promise<NocoRecord<T>>;
+
+export async function updateRecord<T extends Record<string, any>>(
+  tableId: string,
+  a: (Partial<T> & { Id?: number | string; id?: number | string }) | (string | number),
+  b?: Partial<T>
 ): Promise<NocoRecord<T>> {
-  // NocoDB espera PATCH em /records com ARRAY de objetos contendo "Id"
-  const recordId = body.Id ?? body.id;
-  if (recordId == null) {
-    throw new Error('[NocoDB] updateRecord: Id/id é obrigatório no corpo do PATCH');
+  // --- normaliza payload + Id
+  let payload: Partial<T> & { Id: string | number };
+
+  if (typeof a === 'string' || typeof a === 'number') {
+    // forma: (tableId, id, body)
+    if (!b) {
+      throw new Error('[NocoDB] updateRecord: body é obrigatório quando id é passado separadamente');
+    }
+    payload = { ...(b as Partial<T>), Id: String(a) };
+  } else {
+    // forma: (tableId, { Id?/id?, ... })
+    const recordId = a.Id ?? a.id;
+    if (recordId == null) {
+      throw new Error('[NocoDB] updateRecord: Id/id é obrigatório no corpo do PATCH');
+    }
+    // remove chaves duplicadas e fixa Id normalizado
+    const { Id: _Id, id: _id, ...rest } = a as Record<string, any>;
+    payload = { ...(rest as Partial<T>), Id: recordId as string | number };
   }
 
-  // Em update, PRESERVA Id no payload e remove auto-fields (CreatedAt1 etc.)
-  const clean = sanitizePayload<T>(body, { keepId: true });
+  // --- sanitiza mantendo Id e removendo auto-fields
+  const clean = sanitizePayload<T>(payload as Partial<T>, { keepId: true });
 
+  // --- NocoDB PATCH /records espera array de objetos
   return api<NocoRecord<T>>(tableId, '/records', {
     method: 'PATCH',
     body: JSON.stringify([clean]),
   });
 }
+
 
 export async function deleteRecord(tableId: string, id: string | number) {
   return api(tableId, `/records/${id}`, { method: 'DELETE' });
