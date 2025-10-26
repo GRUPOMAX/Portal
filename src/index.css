@@ -1,0 +1,37 @@
+/* src/index.css (Tailwind v4) */
+@import "tailwindcss";
+
+:root { color-scheme: dark; }
+
+html, body, #root { height: 100%; }
+
+body {
+  /* pode manter utilitários aqui */
+}
+
+::-webkit-scrollbar { height: 10px; width: 10px; }
+::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.12); border-radius: 999px; }
+
+
+/* Remove a “caixa” padrão dos DivIcon */
+.leaflet-div-icon {
+  background: transparent;
+  border: none;
+}
+
+/* bolha com fundo branco e sombra leve pra destacar no mapa */
+.wifi-marker .wifi-bubble {
+  background: #ffffff;
+  border-radius: 9999px;
+  padding: 2px;           /* aro branco fininho em volta do SVG */
+  box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+@keyframes floatY {
+  0%   { transform: translateY(6px) }
+  50%  { transform: translateY(-6px) }
+  100% { transform: translateY(6px) }
+}
+

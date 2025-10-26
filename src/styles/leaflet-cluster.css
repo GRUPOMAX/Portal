@@ -1,0 +1,16 @@
+/* src/styles/leaflet-cluster.css */
+.wifi-cluster {
+  background: transparent;
+  border: none;
+}
+.wifi-cluster > div {
+  display: grid;
+  place-items: center;
+  width: 40px; height: 40px;
+  border-radius: 999px;
+  background: #22c55e;
+  color: #062911;
+  font-weight: 700;
+  box-shadow: 0 8px 24px rgba(34,197,94,.35);
+  border: 2px solid #d1fae5;
+}
