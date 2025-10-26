@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "cross-env NODE_ENV=production vite build",
+    "build": "cross-env NODE_ENV=production vite build --mode ghpages",
     "lint": "eslint .",
     "build:gh": "cross-env NODE_ENV=production vite build --mode ghpages",
     "preview": "vite preview",
