@@ -1,73 +1,25 @@
-# React + TypeScript + Vite
+Portal — Seu aplicativo, do seu jeito
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Uma experiência rápida, fluida e moderna.
+Tudo abre suave, tudo responde na hora, tudo funciona como deveria.
 
-Currently, two official plugins are available:
+<img src="https://s3.nexusnerds.com.br/progressapp/apps/wide/bc7c9d45-f417-4f22-9da7-ecae82fc658a/1763312646801-DashApps.gif" style="border-radius:16px; margin:20px 0; width:100%; max-width:100%;" />
+Design limpo e direto
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Interface organizada, cores equilibradas e navegação gostosa.
+O tipo de app que você abre e pensa: “isso aqui foi feito com carinho”.
 
-## React Compiler
+Super leve e ultra rápido
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+Carrega num piscar de olhos.
+Parece magia, mas é só um app bem feito.
 
-## Expanding the ESLint configuration
+Simples de usar
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+Tudo no lugar certo.
+Nada escondido.
+Nada que te faça pensar mais do que o necessário.
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+Mobile, tablet, PC…
+O layout se adapta sem drama.
+Bonito em tudo.
