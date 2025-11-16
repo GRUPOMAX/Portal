@@ -3,12 +3,19 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "scripts": {
-    "dev": "vite",
-    "build": "tsc -b && vite build",
-    "lint": "eslint .",
-    "preview": "vite preview"
-  },
+"scripts": {
+  "dev": "vite",
+  "build": "vite build",
+  "lint": "eslint .",
+  "preview": "vite preview",
+  "typecheck": "tsc -b",
+
+  "build:gh": "vite build --base=/Portal/",
+  "predeploy": "pnpm run build:gh && copy dist\\index.html dist\\404.html",
+  "deploy": "git subtree push --prefix dist origin gh-pages"
+}
+
+,
   "dependencies": {
     "axios": "^1.12.2",
     "leaflet": "^1.9.4",
